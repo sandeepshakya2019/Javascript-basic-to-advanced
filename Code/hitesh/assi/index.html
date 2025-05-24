@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>JS</title>
+    </head>
+    <body></body>
+    <script>
+        const xhr = new XMLHttpRequest();
+        const url = "https://api.github.com/users/sandeepshakya2019";
+
+        xhr.open("GET", url);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                const result = JSON.parse(this.responseText);
+                const {
+                    avatar_url,
+                    followers,
+                    name,
+                    repos_url,
+                    user_view_type,
+                } = result;
+
+                const div = document.createElement("div");
+                div.setAttribute("class", "card");
+                const img = document.createElement("img");
+                img.src = avatar_url;
+                img.width = "100";
+                img.height = "100";
+                const h4 = document.createElement("h4");
+                h4.textContent = name;
+                div.appendChild(img);
+                div.appendChild(h4);
+
+                div.style.backgroundColor = "green";
+                document.body.appendChild(div);
+            } else if (xhr.readyState === 4) {
+                console.error("Error:", xhr.status, xhr.statusText);
+            }
+        };
+        xhr.send();
+    </script>
+</html>
