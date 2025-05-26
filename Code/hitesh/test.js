@@ -1,0 +1,2 @@
+const myarr = [];
+%DebugPrint(myarr);
