@@ -1,58 +1,12 @@
 import express from "express";
 import { users, products } from "./constants.js";
 const app = express();
+import customRateLimiter  from "./rateLimiter.js";
+// const sendResponse = { ip : {count: 0, time: } };
 
-const sendResponse = { data: [], msg: "" };
-
+app.use(customRateLimiter);
 app.get("/", (req, res) => {
     res.send("done");
-});
-
-app.get("/api/users", (req, res) => {
-    const { sort, order } = req.query;
-    const newusers = [...users];
-    if (sort === "id") {
-        if (order == "dsc") {
-            newusers.sort((user1, user2) => user2.id - user1.id);
-        } else {
-            newusers.sort((user1, user2) => user1.id - user1.id);
-        }
-    }
-    sendResponse.data = newusers;
-    sendResponse.msg = "Users found";
-    res.status(200).send(sendResponse);
-});
-
-app.get("/api/users/:id", (req, res) => {
-    const { id } = req.params;
-
-    const parsedId = parseInt(id);
-
-    if (isNaN(parsedId)) {
-        sendResponse.data = [];
-        sendResponse.msg = "Bad Request :: Invalid id";
-        res.status(400).send(sendResponse);
-        return;
-    }
-
-    const user = users.find((user) => {
-        if (user.id === Number(id)) return user;
-        else return null;
-    });
-
-    if (user?.id) {
-        sendResponse.data = user;
-        sendResponse.msg = "User Found";
-        res.status(200).send(sendResponse);
-    } else {
-        sendResponse.data = [];
-        sendResponse.msg = "Bad Request :: User Not found";
-        res.status(400).send(sendResponse);
-    }
-});
-
-app.get("/api/products", (req, res) => {
-    res.send(products);
 });
 
 const port = process.env.PORT || 5000;
